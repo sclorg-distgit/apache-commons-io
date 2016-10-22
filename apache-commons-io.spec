@@ -8,7 +8,7 @@
 
 Name:           %{?scl_prefix}apache-%{short_name}
 Version:        2.4
-Release:        11.2%{?dist}
+Release:        11.3%{?dist}
 Epoch:          1
 Summary:        Utilities to assist with developing IO functionality
 License:        ASL 2.0
@@ -16,9 +16,8 @@ URL:            http://commons.apache.org/%{base_name}
 Source0:        http://archive.apache.org/dist/commons/%{base_name}/source/%{short_name}-%{version}-src.tar.gz
 BuildArch:      noarch
 
-BuildRequires:  java7-devel
-BuildRequires:  maven-local
-BuildRequires:  apache-commons-parent >= 26-7
+BuildRequires:  maven30-maven-local
+BuildRequires:  maven30-apache-commons-parent >= 26-7
 
 Provides:       %{?scl_prefix}jakarta-%{short_name} = %{epoch}:%{version}-%{release}
 Obsoletes:      %{?scl_prefix}jakarta-%{short_name} < %{epoch}:%{version}-%{release}
@@ -37,20 +36,20 @@ Obsoletes:      %{?scl_prefix}jakarta-%{short_name}-javadoc < %{epoch}:%{version
 This package provides %{summary}.
 
 %prep
-%{?scl:scl enable %{scl} - << "EOF"}
+%{?scl:scl enable maven30 %{scl} - << "EOF"}
 %setup -q -n %{short_name}-%{version}-src
 sed -i 's/\r//' *.txt
 %{?scl:EOF}
 
 %build
-%{?scl:scl enable %{scl} - << "EOF"}
+%{?scl:scl enable maven30 %{scl} - << "EOF"}
 %mvn_file  : %{short_name} %{pkg_name}
 %mvn_alias : org.apache.commons:
 %mvn_build
 %{?scl:EOF}
 
 %install
-%{?scl:scl enable %{scl} - << "EOF"}
+%{?scl:scl enable maven30 %{scl} - << "EOF"}
 %mvn_install
 %{?scl:EOF}
 
@@ -61,6 +60,9 @@ sed -i 's/\r//' *.txt
 %doc LICENSE.txt NOTICE.txt
 
 %changelog
+* Tue Jun 17 2014 Severin Gehwolf <sgehwolf@redhat.com> - 1:2.4-11.3
+- Rebuild against maven30 collection.
+
 * Mon Jan 20 2014 Omair Majid <omajid@redhat.com> - 1:2.4-11.2
 - Rebuild in order to fix osgi()-style provides.
 - Resolves: RHBZ#1054813
